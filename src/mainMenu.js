@@ -14,29 +14,6 @@ class mainMenu extends Phaser.Scene {
             frameWidth: 24,
             frameHeight: 16 
         })
-        /**
-        this.anims.create({
-            key: 'playerIdle_anim',
-            frames: this.anims.generateFrameNumbers("player_sprite", {frames:[3,8]}),
-            frameRate: 20,
-            repeat: -1,
-            //hideOnComplete:true
-        });
-        this.anims.create({
-            key: 'playerTurnLeft_anim',
-            frames: this.anims.generateFrameNumbers("player_sprite", {frames:[1,2,6,7]}),
-            frameRate: 20,
-            //repeat: -1,
-            //hideOnComplete:true
-        });
-        this.anims.create({
-            key: 'playerTurnRight_anim',
-            frames: this.anims.generateFrameNumbers("player_sprite", {frames:[4,5,9,10]}),
-            frameRate: 20,
-            repeat: -1,
-            //hideOnComplete:true
-        });
-        */
     }
 
     create(){
