@@ -9,47 +9,42 @@ class mainGame extends Phaser.Scene {
     }
 
     create() {
+        //Game World Deminsions
+        this.worldHeight = 1440;
+        this.worldWidth = 2448;
+        this.physics.world.setBounds(0,0,this.worldWidth,this.worldHeight,true,true,true,true);
+        //Player Settings
+        this.playerMaxVelocity = 400;
+        this.playerDrag = 0.99
+
         //Add in background
         this.background = this.add.tileSprite(0, 0, this.sys.canvas.width, this.sys.canvas.height, "background");
-        this.background.setScale(3);
+        this.background.setScale(6);
         this.background.setOrigin(0, 0);
         this.background.setScrollFactor(0);
 
-        //Animations for player
-        this.anims.create({
-            key: 'playerIdle_anim',
-            frames: this.anims.generateFrameNumbers("player_sprite", { frames: [4, 5] }),
-            frameRate: 20,
-            repeat: -1,
-        });
-        //Unused player animations
-        /**
-        this.anims.create({
-            key: 'playerTurnLeft_anim',
-            frames: this.anims.generateFrameNumbers("player_sprite", { frames: [0, 1] }),
-            frameRate: 20,
-            repeat: -1,
-        });
-        this.anims.create({
-            key: 'playerTurnRight_anim',
-            frames: this.anims.generateFrameNumbers("player_sprite", { frames: [6, 7] }),
-            frameRate: 20,
-            repeat: -1,
-        });
-        */
-
-        //Create player in the center of the canvas
-        this.player = this.physics.add.sprite(this.sys.canvas.width / 2, this.sys.canvas.height / 2, "player_sprite");
+        //Create player in the center of the world 
+        this.player = this.physics.add.sprite(this.worldWidth / 2, this.worldHeight / 2, "player_sprite");
         //Double the size + Play the player idle anim
         this.player.setScale(2);
         this.player.play("playerIdle_anim");
 
         //Player input settings
         this.cursorKeys = this.input.keyboard.createCursorKeys();
+        //Drag will use a damping effect rather than a linear approach. Much smoother brakes.
         this.player.setDamping(true);
-        this.player.setDrag(0.99);
+        this.player.setDrag(this.playerDrag);
+        //Used for the toggle in the dampener function
         this.dampeners = true;
-        this.player.setMaxVelocity(200);
+        this.player.setMaxVelocity(this.playerMaxVelocity);
+        this.player.setCollideWorldBounds(true);
+
+        //Camera Setup
+        this.myCam = this.cameras.main;
+        //Scenes are infinite, so we set boundaries with the camera and the player
+        this.myCam.setBounds(0, 0, this.worldWidth, this.worldHeight);
+        //Tell the camera to follow the player
+        this.myCam.startFollow(this.player);
     }
 
     update() {
@@ -57,6 +52,7 @@ class mainGame extends Phaser.Scene {
         this.speedController();
         this.directionController();
         this.inertiaDampenerController();
+        this.parallaxController();
     }
 
     //Main player movement functions
@@ -65,11 +61,11 @@ class mainGame extends Phaser.Scene {
     speedController() {
         if (this.cursorKeys.up.isDown) {
             //Accelerate
-            this.physics.velocityFromRotation(this.player.rotation, 200, this.player.body.acceleration);
+            this.physics.velocityFromRotation(this.player.rotation, 250, this.player.body.acceleration);
         }
         else if (this.cursorKeys.down.isDown) {
             //Decelerate
-            this.physics.velocityFromRotation(this.player.rotation, -200, this.player.body.acceleration);
+            this.physics.velocityFromRotation(this.player.rotation, -250, this.player.body.acceleration);
         }
         else{
             this.player.setAcceleration(0);
@@ -98,6 +94,13 @@ class mainGame extends Phaser.Scene {
                 this.player.setDrag(0.99);
             }
         }
+    }
+
+    //Controlls scroll factor is parallax (to be implemented next)
+    parallaxController(){
+        this.background.tilePositionX = this.myCam.scrollX * .005;
+        this.background.tilePositionY = this.myCam.scrollY * .005;
+
     }
 
 

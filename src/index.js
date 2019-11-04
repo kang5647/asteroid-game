@@ -9,8 +9,8 @@ const config = {
   //height: window.innerHeight * window.devicePixelRatio,
 
   type: Phaser.CANVAS,
-  width: 816,
-  height: 480,
+  width: 1600,
+  height: 920,
   pixelArt:true,
   scene: [mainMenu,mainGame],
   physics:{
