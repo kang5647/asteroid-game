@@ -1,7 +1,10 @@
 //import background from "./assets/backgrounds/space/parallax-space-background.png"
 import background from "./assets/backgrounds/space/background.png"
+import stars from "./assets/backgrounds/space/parallax-space-stars.png"
+import planet_big from "./assets/backgrounds/space/parallax-space-big-planet.png"
+import planet_far from "./assets/backgrounds/space/parallax-space-far-planets.png"
+import planet_ring from "./assets/backgrounds/space/parallax-space-ring-planet.png"
 import player_sprite from "./assets/sprites/player.png"
-import enemy_sprite from "./assets/sprites/enemy-medium.png"
 
 
 class mainMenu extends Phaser.Scene {
@@ -11,6 +14,10 @@ class mainMenu extends Phaser.Scene {
 
     preload(){
         this.load.image("background",background);
+        this.load.image("stars",stars);
+        this.load.image("planet_big",planet_big);
+        this.load.image("planet_far",planet_far);
+        this.load.image("planet_ring",planet_ring);
         this.load.spritesheet("player_sprite",player_sprite,{
             frameWidth: 24,
             frameHeight: 16 
