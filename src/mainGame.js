@@ -34,9 +34,16 @@ class mainGame extends Phaser.Scene {
         this.planet_far.setScrollFactor(0)
 
         //Add in ring planet
-        this.planet_ring= this.add.tileSprite(0, 0, this.worldWidth, this.worldHeight, "planet_ring");
-        this.planet_ring.setScale(1);
+        this.planet_ring = this.add.tileSprite(0, 0, 2000, 2000, "planet_ring");
+        //this.planet_ring = this.
+        this.planet_ring.setScale(5);
         this.planet_ring.setScrollFactor(0)
+        //this.planet_ring.setTileScale(1,1)
+
+        //Add in big planets
+        this.planet_big = this.add.tileSprite(0, 0, this.sys.canvas.width, this.sys.canvas.height, "planet_big");
+        this.planet_big.setScale(6);
+        this.planet_big.setScrollFactor(0);
 
 
         //Create player in the center of the world 
@@ -114,14 +121,16 @@ class mainGame extends Phaser.Scene {
 
     //Controlls scroll factor is parallax (to be implemented next)
     parallaxController(){
-        this.background.tilePositionX = this.myCam.scrollX * .005;
-        this.background.tilePositionY = this.myCam.scrollY * .005;
-        this.stars.tilePositionX = this.myCam.scrollX * .005;
-        this.stars.tilePositionY = this.myCam.scrollY * .005;
-        this.planet_far.tilePositionX = this.myCam.scrollX * 0.05
-        this.planet_far.tilePositionY = this.myCam.scrollY * 0.05
-        this.planet_ring.tilePositionX = this.myCam.scrollX * 0.05
-        this.planet_ring.tilePositionY = this.myCam.scrollY * 0.05
+        //this.background.tilePositionX = this.myCam.scrollX * .005;
+        //this.background.tilePositionY = this.myCam.scrollY * .005;
+        //this.stars.tilePositionX = this.myCam.scrollX * .005;
+        //this.stars.tilePositionY = this.myCam.scrollY * .005;
+        this.planet_far.tilePositionX = this.myCam.scrollX * 0.05;
+        this.planet_far.tilePositionY = this.myCam.scrollY * 0.05;
+        this.planet_ring.tilePositionX = this.myCam.scrollX * 0.15;
+        this.planet_ring.tilePositionY = this.myCam.scrollY * 0.15;
+        this.planet_big.tilePositionX = this.myCam.scrollX * 0.25;
+        this.planet_big.tilePositionY = this.myCam.scrollY * 0.25;
 
     }
 
