@@ -5,6 +5,7 @@ import planet_big from "./assets/backgrounds/space/parallax-space-big-planet.png
 import planet_far from "./assets/backgrounds/space/parallax-space-far-planets.png"
 import planet_ring from "./assets/backgrounds/space/parallax-space-ring-planet.png"
 import player_sprite from "./assets/sprites/player.png"
+import laser_bolt from "./assets/sprites/laser-bolts.png"
 
 
 class mainMenu extends Phaser.Scene {
@@ -22,6 +23,11 @@ class mainMenu extends Phaser.Scene {
             frameWidth: 24,
             frameHeight: 16 
         })
+
+        this.load.spritesheet("laser_bolt",laser_bolt,{
+            frameWidth: 16,
+            frameHeight: 16 
+        })
     }
 
     create(){
@@ -34,10 +40,16 @@ class mainMenu extends Phaser.Scene {
             repeat: -1,
         });
 
+        this.anims.create({
+            key: 'laserBolt_anim',
+            frames: this.anims.generateFrameNumbers("laser_bolt", { frames: [0, 2] }),
+            frameRate: 20,
+            repeat: -1,
+        });
+
         //After loading everything, move to the main game scene
         this.scene.switch("mainGame")
     }
-
 }
 
 export default mainMenu;
