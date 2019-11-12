@@ -11,14 +11,21 @@ class mainGame extends Phaser.Scene {
     create() {
         //Game World Deminsions
         this.worldHeight = 1440;
-        //this.worldWidth = 2448;
-        this.worldWidth = 200000;
-        this.physics.world.setBounds(0,0,this.worldWidth,this.worldHeight,true,true,true,true);
+        this.worldWidth = 2448;
+        this.bounds = this.physics.world.setBounds(0,0,this.worldWidth,this.worldHeight,true,true,true,true);
+
+
+        this.physics.world.on('worldbounds',this.deleteBeam,this);
+
+        this.bolts = this.physics.add.group();
+        //this.physics.add.collider(this.bolts, this.physics.world.bounds);
+        //this.physics.add.overlap(this.bolts, this.bounds, this.deleteBeam, null, this);
+
         //Player Settings
         this.playerMaxVelocity = 400;
-        this.playerDrag = 0.99
+        this.playerDrag = 0.99;
 
-        //Add in background layers
+        //Add in parallax background layers
         
         //Add in galaxy layer 
         this.background = this.add.tileSprite(0, 0, this.sys.canvas.width, this.sys.canvas.height, "background");
@@ -76,7 +83,6 @@ class mainGame extends Phaser.Scene {
     }
 
     update() {
-        //Player Input Controller Functions
         this.speedController();
         this.directionController();
         this.inertiaDampenerController();
@@ -147,7 +153,12 @@ class mainGame extends Phaser.Scene {
         this.planet_big.tilePositionY = this.myCam.scrollY * 0.22;
     }
     shootBeam(){
-        this.beam = new Beam(this);
+        let beam = new Beam(this);
+        beam.update();
+    }
+    deleteBeam(beamBody){
+        console.log(beamBody);
+        beamBody.gameObject.destroy();
     }
 }
 

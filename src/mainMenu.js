@@ -1,4 +1,3 @@
-//import background from "./assets/backgrounds/space/parallax-space-background.png"
 import background from "./assets/backgrounds/space/background.png"
 import stars from "./assets/backgrounds/space/parallax-space-stars.png"
 import planet_big from "./assets/backgrounds/space/parallax-space-big-planet.png"
