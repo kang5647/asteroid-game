@@ -1,7 +1,7 @@
 import { throws } from "assert";
 import { runInThisContext } from "vm";
 
-import Beam from "./Beam.js"
+import Bolt from "./Bolt.js"
 
 class mainGame extends Phaser.Scene {
     constructor() {
@@ -13,13 +13,14 @@ class mainGame extends Phaser.Scene {
         this.worldHeight = 1440;
         this.worldWidth = 2448;
         this.bounds = this.physics.world.setBounds(0,0,this.worldWidth,this.worldHeight,true,true,true,true);
+        //Upon a collision with world boundries, delete whatever body comes in contact.
+        //This only works if the object's body is set to collide with boundries and onWorldsBounds is set to true. 
+        this.physics.world.on('worldbounds',function(body){
+            body.gameObject.destroy();
+        },this);
 
-
-        this.physics.world.on('worldbounds',this.deleteBeam,this);
-
+        //Create physics group, objects will be added automatically when a bolt object is created
         this.bolts = this.physics.add.group();
-        //this.physics.add.collider(this.bolts, this.physics.world.bounds);
-        //this.physics.add.overlap(this.bolts, this.bounds, this.deleteBeam, null, this);
 
         //Player Settings
         this.playerMaxVelocity = 400;
@@ -53,12 +54,8 @@ class mainGame extends Phaser.Scene {
         this.planet_big.setScale(4);
         this.planet_big.setScrollFactor(0);
 
-        
-
-
         //Create player in the center of the world 
         this.player = this.physics.add.sprite(this.worldWidth / 2, this.worldHeight / 2, "player_sprite");
-        this.laserBolt = this.physics.add.sprite(this.worldWidth / 2, this.worldHeight / 2, "laser_bolt");
         //Double the size + Play the player idle anim
         this.player.setScale(2);
         this.player.play("playerIdle_anim");
@@ -123,7 +120,7 @@ class mainGame extends Phaser.Scene {
         //Working solution to not allowing the player to just hold the down key.
         //Later on I want to implement a recharging ammo system. But thats for a later day
         if (Phaser.Input.Keyboard.JustDown(this.cursorKeys.space)){
-            this.shootBeam();
+            new Bolt(this);
         }
     }
 
@@ -144,21 +141,12 @@ class mainGame extends Phaser.Scene {
     //Parallax functinos by moving objects (tilesprites) across the screen, based on camera movement, at different speeds. 
     //Objects supposed to be closer up move faster while objects supposed to be far away move slower. This creates a depth effect.
     parallaxController(){
-        //Stars/galaxy don't really need to move, though I like the effect it gave
         this.planet_far.tilePositionX = this.myCam.scrollX * 0.05;
         this.planet_far.tilePositionY = this.myCam.scrollY * 0.05;
         this.planet_ring.tilePositionX = this.myCam.scrollX * 0.1;
         this.planet_ring.tilePositionY = this.myCam.scrollY * 0.1;
         this.planet_big.tilePositionX = this.myCam.scrollX * 0.22;
         this.planet_big.tilePositionY = this.myCam.scrollY * 0.22;
-    }
-    shootBeam(){
-        let beam = new Beam(this);
-        beam.update();
-    }
-    deleteBeam(beamBody){
-        console.log(beamBody);
-        beamBody.gameObject.destroy();
     }
 }
 
