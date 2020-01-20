@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import mainGame from "./mainGame.js"
-import mainMenu from "./mainMenu.js"
+import mainGame from "./mainGame.js";
+import mainMenu from "./mainMenu.js";
 
 const config = {
   //type: Phaser.AUTO,
@@ -9,13 +9,13 @@ const config = {
   //height: window.innerHeight * window.devicePixelRatio,
 
   type: Phaser.CANVAS,
-  width: 1600,
-  height: 920,
-  pixelArt:true,
-  scene: [mainMenu,mainGame],
-  physics:{
-      default: "arcade",
-      arcade: {}
+  width: window.innerWidth,
+  height: window.innerHeight,
+  pixelArt: true,
+  scene: [mainMenu, mainGame],
+  physics: {
+    default: "arcade",
+    arcade: {}
   }
 };
 
