@@ -6,6 +6,9 @@ import planet_ring from "../public/backgrounds/space/parallax-space-ring-planet.
 import player_sprite from "../public/sprites/player.png";
 import laser_bolt from "../public/sprites/laser-bolts.png";
 import asteroids from "../public/sprites/asteroids.png";
+import small_asteroid from "../public/sprites/small_asteroid.png";
+import medium_asteroids from "../public/sprites/medium_asteroids.png";
+import large_asteroid from "../public/sprites/large_asteroid.png";
 
 class mainMenu extends Phaser.Scene {
   constructor() {
@@ -28,12 +31,14 @@ class mainMenu extends Phaser.Scene {
       frameHeight: 16
     });
 
-    this.load.spritesheet("small_asteroid", asteroids, {
-      frameWidth: 69,
+    this.load.spritesheet("medium_asteroids", asteroids, {
+      frameWidth: 50,
       frameHeight: 46,
-      startFrame: 0,
-      endFrame: 0
+      endFrame: 3
     });
+
+    this.load.image("large_asteroid", large_asteroid);
+    this.load.image("small_asteroid", small_asteroid);
   }
 
   create() {

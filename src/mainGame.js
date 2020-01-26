@@ -32,7 +32,8 @@ class mainGame extends Phaser.Scene {
     this.asteroid = this.physics.add.sprite(
       this.worldWidth / 2,
       this.worldHeight / 2,
-      "small_asteroid"
+      "large_asteroid",
+      2
     );
     this.asteroid.setScale(2);
     this.createPlayer();
