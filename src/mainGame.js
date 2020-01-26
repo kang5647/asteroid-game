@@ -19,12 +19,6 @@ class mainGame extends Phaser.Scene {
 
     //Create physics group, objects will be added automatically when a bolt object is created
     this.bolts = this.physics.add.group();
-    this.asteroid = this.physics.add.sprite(
-      this.worldWidth / 2,
-      this.worldHeight / 2,
-      "asteroids",
-      0
-    );
 
     //Add in parallax background layers
     this.createBackground();
@@ -35,6 +29,8 @@ class mainGame extends Phaser.Scene {
       "large_asteroid",
       2
     );
+    this.physics.velocityFromRotation(50, 10, this.asteroid.body.velocity);
+
     this.asteroid.setScale(2);
     this.createPlayer();
 

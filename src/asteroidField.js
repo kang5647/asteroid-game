@@ -1,0 +1,1 @@
+class asteroidField extends Phaser.Sprite
