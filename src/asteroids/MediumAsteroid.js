@@ -1,29 +1,12 @@
+import Asteroid from "./Asteroid.js";
 import smallAsteroid from "./SmallAsteroid.js";
 
-class MediumAsteroid extends Phaser.Physics.Arcade.Sprite {
+class MediumAsteroid extends Asteroid {
   constructor(scene, x, y, rotation, speed) {
-    //Use these to pass these back to the super class to construct the object
-    super(scene, x, y, "medium_asteroid_a");
-    this.scene = scene;
-    //Then add to scene
-    scene.add.existing(this);
-    //Add to physics group
-    scene.asteroids.add(this);
-
-    //Configuration for large asteroid
-    this.setScale(2);
-    scene.physics.velocityFromRotation(
-      Math.floor(Math.random() * 360),
-      speed,
-      this.body.velocity
-    );
-    //Set angle of bolt to that of what player is facing
-    //Enable this object in the scene's physics, without this line adding velocity will have no effect.
-    scene.physics.world.enableBody(this);
-    //Set so the projectiles collide with the set world boundries
-    this.setCollideWorldBounds(true);
+    super(scene, x, y, "medium_asteroid_a", rotation, speed);
   }
 
+  //Upon destruction, this method creates 2 small asteroids, launches them in any direction, and then deletes itself.
   destroyAsteroid() {
     new smallAsteroid(
       this.scene,
