@@ -7,7 +7,8 @@ import player_sprite from "../public/sprites/player.png";
 import laser_bolt from "../public/sprites/laser-bolts.png";
 import asteroids from "../public/sprites/asteroids.png";
 import small_asteroid from "../public/sprites/small_asteroid.png";
-import medium_asteroids from "../public/sprites/medium_asteroids.png";
+import medium_asteroid_a from "../public/sprites/medium_asteroids_a.png";
+import medium_asteroid_b from "../public/sprites/medium_asteroids_b.png";
 import large_asteroid from "../public/sprites/large_asteroid.png";
 
 class mainMenu extends Phaser.Scene {
@@ -38,6 +39,8 @@ class mainMenu extends Phaser.Scene {
     });
 
     this.load.image("large_asteroid", large_asteroid);
+    this.load.image("medium_asteroid_a", medium_asteroid_a);
+    this.load.image("medium_asteroid_b", medium_asteroid_b);
     this.load.image("small_asteroid", small_asteroid);
   }
 

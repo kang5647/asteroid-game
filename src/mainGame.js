@@ -1,7 +1,10 @@
 import { throws } from "assert";
 import { runInThisContext } from "vm";
 
-import Bolt from "./Bolt.js";
+import Bolt from "./projectiles/Bolt.js";
+import LargeAsteroid from "./asteroids/LargeAsteroid.js";
+import MediumAsteroid from "./asteroids/MediumAsteroid.js";
+import SmallAsteroid from "./asteroids/SmallAsteroid.js";
 
 class mainGame extends Phaser.Scene {
   constructor() {
@@ -14,25 +17,24 @@ class mainGame extends Phaser.Scene {
     this.worldWidth = 10000;
 
     this.createWorld(this.worldHeight, this.worldWidth);
-    //Upon a collision with world boundries, delete whatever body comes in contact.
-    //This only works if the object's body is set to collide with boundries and onWorldsBounds is set to true.
-
-    //Create physics group, objects will be added automatically when a bolt object is created
-    this.bolts = this.physics.add.group();
-
-    //Add in parallax background layers
     this.createBackground();
-
-    this.asteroid = this.physics.add.sprite(
-      this.worldWidth / 2,
-      this.worldHeight / 2,
-      "large_asteroid",
-      2
-    );
-    this.physics.velocityFromRotation(50, 10, this.asteroid.body.velocity);
-
-    this.asteroid.setScale(2);
     this.createPlayer();
+
+    //Create physics group, objects will be added automatically when a bolt object/asteroid is created
+    this.bolts = this.physics.add.group();
+    this.asteroids = this.physics.add.group();
+
+    this.physics.add.collider(
+      this.bolts,
+      this.asteroids,
+      this.boltAsteroidCollision
+    );
+    this.physics.add.collider(this.asteroids, this.asteroids);
+    this.physics.add.collider(this.player, this.asteroids, () => {
+      this.player.destroy();
+    });
+
+    new LargeAsteroid(this, this.worldWidth / 2, this.worldHeight / 2, 80, 80);
 
     //Camera Setup
     this.myCam = this.cameras.main;
@@ -214,6 +216,15 @@ class mainGame extends Phaser.Scene {
     this.dampeners = true;
     this.player.setMaxVelocity(this.playerMaxVelocity);
     this.player.setCollideWorldBounds(true);
+
+    //Alter Player Hitbox
+    this.player.setSize(12, 12);
+    this.player.setOffset(6, 0);
+  }
+
+  boltAsteroidCollision(bolt, asteroid) {
+    delete bolt.destroy();
+    asteroid.destroyAsteroid();
   }
 }
 
