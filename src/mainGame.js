@@ -13,8 +13,8 @@ class mainGame extends Phaser.Scene {
 
   create() {
     //Game World Deminsions
-    this.worldHeight = 10000;
-    this.worldWidth = 10000;
+    this.worldHeight = 1500;
+    this.worldWidth = 1500;
 
     this.createWorld(this.worldHeight, this.worldWidth);
     this.createBackground();
@@ -142,16 +142,18 @@ class mainGame extends Phaser.Scene {
   }
 
   createBackground() {
-    this.background = this.add.tileSprite(
-      0,
-      0,
-      this.sys.canvas.width,
-      this.sys.canvas.height,
+    this.background = this.add.image(
+      window.innerWidth / 2,
+      window.innerHeight / 2,
       "background"
     );
-    this.background.setScale(6);
-    this.background.setOrigin(0, 0);
+    this.background.setDisplaySize(window.innerWidth, window.innerHeight);
+
+    this.background.setSize(window.innerWidth, window.innerHeight);
     this.background.setScrollFactor(0);
+    //this.background.setScale(6);
+    //this.background.setOrigin(0, 0);
+    //this.background.setScrollFactor(0);
 
     //Add in stars layer
     this.stars = this.add.tileSprite(
