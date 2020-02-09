@@ -10,6 +10,7 @@ import small_asteroid from "../public/sprites/small_asteroid.png";
 import medium_asteroid_a from "../public/sprites/medium_asteroids_a.png";
 import medium_asteroid_b from "../public/sprites/medium_asteroids_b.png";
 import large_asteroid from "../public/sprites/large_asteroid.png";
+import explosion from "../public/sprites/explosion.png";
 
 class mainMenu extends Phaser.Scene {
   constructor() {
@@ -38,6 +39,11 @@ class mainMenu extends Phaser.Scene {
       endFrame: 3
     });
 
+    this.load.spritesheet("explosion", explosion, {
+      frameWidth: 16,
+      frameHeight: 16
+    });
+
     this.load.image("large_asteroid", large_asteroid);
     this.load.image("medium_asteroid_a", medium_asteroid_a);
     this.load.image("medium_asteroid_b", medium_asteroid_b);
@@ -61,6 +67,15 @@ class mainMenu extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers("laser_bolt", { frames: [0, 2] }),
       frameRate: 20,
       repeat: -1
+    });
+
+    this.anims.create({
+      key: "explosion_anim",
+      frames: this.anims.generateFrameNumbers("explosion", {
+        frames: [0, 1, 2, 3, 4]
+      }),
+      frameRate: 20,
+      repeat: 1
     });
 
     //After loading everything, move to the main game scene

@@ -31,7 +31,9 @@ class mainGame extends Phaser.Scene {
     );
     this.physics.add.collider(this.asteroids, this.asteroids);
     this.physics.add.collider(this.player, this.asteroids, () => {
-      this.player.destroy();
+      this.player.on("animcomplete", this.killPlayer, this);
+      this.player.play("explosion_anim");
+      this.disablePlayer = true;
     });
 
     new LargeAsteroid(this, this.worldWidth / 2, this.worldHeight / 2, 80, 80);
@@ -45,11 +47,13 @@ class mainGame extends Phaser.Scene {
   }
 
   update() {
-    this.speedController();
-    this.directionController();
-    this.inertiaDampenerController();
-    this.parallaxController();
-    this.shootingController();
+    if (this.player !== null) {
+      this.speedController();
+      this.directionController();
+      this.inertiaDampenerController();
+      this.parallaxController();
+      this.shootingController();
+    }
   }
 
   //Main player movement functions
@@ -222,6 +226,17 @@ class mainGame extends Phaser.Scene {
     //Alter Player Hitbox
     this.player.setSize(12, 12);
     this.player.setOffset(6, 0);
+
+    //In order to play the explosion animation we need the player to exist.
+    //This is used to disable player input when the player dies.
+    this.disablePlayer = false;
+    //Upon player death we want to play an animation and then kill the player.
+    this.player.on("animcomplete", this.killPlayer, this);
+  }
+
+  killPlayer() {
+    this.player.destroy();
+    this.player = null;
   }
 
   boltAsteroidCollision(bolt, asteroid) {
