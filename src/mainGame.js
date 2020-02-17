@@ -3,6 +3,7 @@ import { runInThisContext } from "vm";
 
 import Bolt from "./projectiles/Bolt.js";
 import LargeAsteroid from "./asteroids/LargeAsteroid.js";
+import AsteroidController from "./asteroids/AsteroidController.js";
 //import MediumAsteroid from "./asteroids/MediumAsteroid.js";
 //import SmallAsteroid from "./asteroids/SmallAsteroid.js";
 
@@ -13,8 +14,8 @@ class mainGame extends Phaser.Scene {
 
   create() {
     //Game World Deminsions
-    this.worldHeight = 1500;
-    this.worldWidth = 1500;
+    this.worldWidth = 1920;
+    this.worldHeight = 1080;
 
     this.createWorld(this.worldHeight, this.worldWidth);
     this.createBackground();
@@ -28,14 +29,21 @@ class mainGame extends Phaser.Scene {
     //Colliders are used to trigger functions when two objects collide
     this.createColliders();
 
-    new LargeAsteroid(this, this.worldWidth / 2, this.worldHeight / 2, 80, 80);
-
     //Camera Setup
     this.myCam = this.cameras.main;
     //Scenes are infinite, so we set boundaries with the camera and the player
     this.myCam.setBounds(0, 0, this.worldWidth, this.worldHeight);
     //Tell the camera to follow the player
     this.myCam.startFollow(this.player);
+
+    //Create asteroidController
+    this.asteroidController = new AsteroidController();
+
+    //Start Level 1
+    //Set Difficulty
+    this.difficultyMultiplier = 5;
+    this.level = 1;
+    this.spawnWaveOfAsteroids(1);
   }
 
   update() {
@@ -45,6 +53,12 @@ class mainGame extends Phaser.Scene {
       this.inertiaDampenerController();
       this.parallaxController();
       this.shootingController();
+
+      //Wait until wave is completed
+      if (this.asteroids.getLength() === 0) {
+        this.level += 1;
+        this.spawnWaveOfAsteroids(this.level);
+      }
     }
   }
 
@@ -119,8 +133,8 @@ class mainGame extends Phaser.Scene {
     this.bounds = this.physics.world.setBounds(
       0,
       0,
-      this.worldWidth,
-      this.worldHeight,
+      worldWidth,
+      worldHeight,
       true,
       true,
       true,
@@ -306,6 +320,13 @@ class mainGame extends Phaser.Scene {
     restartButton.visible = false;
 
     this.gameOverOverlay = { gameOverText, restartButton };
+  }
+
+  spawnWaveOfAsteroids(level) {
+    this.asteroidController.genAsteroids(
+      this,
+      level * this.difficultyMultiplier
+    );
   }
 }
 
