@@ -2,16 +2,12 @@ import LargeAsteroid from "./LargeAsteroid.js";
 import MediumAsteroid from "./MediumAsteroid.js";
 import SmallAsteroid from "./SmallAsteroid.js";
 
+//Asteroid Controller is responsible for generating and clearing waves of asteroids.
 class AsteroidController {
   //In order to prevent any null errors we need to init this.asteroids with values.
-  constructor(scene) {
-    this.genAsteroids(scene, 0);
-  }
-
   genAsteroids(scene, num) {
-    this.asteroids = [];
     for (let i = 0; i < num; i++) {
-      this.asteroids.push(this.spawnAsteroid(scene));
+      this.spawnAsteroid(scene);
     }
   }
 
@@ -20,13 +16,6 @@ class AsteroidController {
     for (let i = 0; i < this.asteroids.length; i++) {
       this.asteroids[i].destroy();
     }
-  }
-
-  checkAllAsteroidsCleared() {
-    if (this.asteroids.length === 0) {
-      return true;
-    }
-    return false;
   }
 
   spawnAsteroid(scene) {

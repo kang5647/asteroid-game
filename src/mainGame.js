@@ -37,7 +37,7 @@ class mainGame extends Phaser.Scene {
     this.myCam.startFollow(this.player);
 
     //Create asteroidController
-    this.asteroidController = new AsteroidController(this);
+    this.asteroidController = new AsteroidController();
 
     //Start Level 1
     //Set Difficulty
