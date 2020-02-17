@@ -3,19 +3,33 @@ import MediumAsteroid from "./MediumAsteroid.js";
 import SmallAsteroid from "./SmallAsteroid.js";
 
 class AsteroidController {
+  //In order to prevent any null errors we need to init this.asteroids with values.
   constructor(scene) {
-    this.init(scene);
-    window.setInterval(() => {
-      this.spawnAsteroids(scene);
-    }, 500);
+    this.genAsteroids(scene, 0);
   }
 
-  init(scene) {
-    this.scene = scene;
-    console.log(this.scene);
+  genAsteroids(scene, num) {
+    this.asteroids = [];
+    for (let i = 0; i < num; i++) {
+      this.asteroids.push(this.spawnAsteroid(scene));
+    }
   }
 
-  spawnAsteroids(scene) {
+  //Deletes all asteroids from the field
+  clearAsteroids() {
+    for (let i = 0; i < this.asteroids.length; i++) {
+      this.asteroids[i].destroy();
+    }
+  }
+
+  checkAllAsteroidsCleared() {
+    if (this.asteroids.length === 0) {
+      return true;
+    }
+    return false;
+  }
+
+  spawnAsteroid(scene) {
     //Determine what type of asteroid to spawn
     let asteroidType = Math.floor(Math.random() * 3);
     //Generate what side to spawn the asteroid from (left,right,top,bottom)
@@ -28,18 +42,9 @@ class AsteroidController {
     );
     //Using the side, generate the direction the asteroid should be moving
     let direction = this.genDirection(side);
-    if (side === 0) {
-      console.log("left: ", direction);
-    } else if (side === 1) {
-      console.log("right", direction);
-    } else if (side === 2) {
-      console.log("bottom: ", direction);
-    } else if (side === 3) {
-      console.log("top: ", direction);
-    }
     if (asteroidType === 0) {
       //If 0 spawn Large Asteroid
-      new LargeAsteroid(
+      return new LargeAsteroid(
         scene,
         spawnLocation.x,
         spawnLocation.y,
@@ -49,7 +54,7 @@ class AsteroidController {
     }
     //If 1 spawn Medium Asteroid
     else if (asteroidType === 1) {
-      new MediumAsteroid(
+      return new MediumAsteroid(
         scene,
         spawnLocation.x,
         spawnLocation.y,
@@ -59,7 +64,7 @@ class AsteroidController {
     }
     //If 2 spawn small Asteroid
     else if (asteroidType === 2) {
-      new SmallAsteroid(
+      return new SmallAsteroid(
         scene,
         spawnLocation.x,
         spawnLocation.y,

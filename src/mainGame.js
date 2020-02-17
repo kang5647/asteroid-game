@@ -14,8 +14,8 @@ class mainGame extends Phaser.Scene {
 
   create() {
     //Game World Deminsions
-    this.worldHeight = 1500;
-    this.worldWidth = 1500;
+    this.worldWidth = 1920;
+    this.worldHeight = 1080;
 
     this.createWorld(this.worldHeight, this.worldWidth);
     this.createBackground();
@@ -36,7 +36,14 @@ class mainGame extends Phaser.Scene {
     //Tell the camera to follow the player
     this.myCam.startFollow(this.player);
 
-    new AsteroidController(this);
+    //Create asteroidController
+    this.asteroidController = new AsteroidController(this);
+
+    //Start Level 1
+    //Set Difficulty
+    this.difficultyMultiplier = 5;
+    this.level = 1;
+    this.spawnWaveOfAsteroids(1);
   }
 
   update() {
@@ -46,6 +53,12 @@ class mainGame extends Phaser.Scene {
       this.inertiaDampenerController();
       this.parallaxController();
       this.shootingController();
+
+      //Wait until wave is completed
+      if (this.asteroids.getLength() === 0) {
+        this.level += 1;
+        this.spawnWaveOfAsteroids(this.level);
+      }
     }
   }
 
@@ -120,8 +133,8 @@ class mainGame extends Phaser.Scene {
     this.bounds = this.physics.world.setBounds(
       0,
       0,
-      this.worldWidth,
-      this.worldHeight,
+      worldWidth,
+      worldHeight,
       true,
       true,
       true,
@@ -263,14 +276,7 @@ class mainGame extends Phaser.Scene {
     );
 
     //This allows asteroids to collide with one another rather than move through one another.
-    this.physics.add.collider(
-      this.asteroids,
-      this.asteroids,
-      (asteroidA, asteroidB) => {
-        asteroidA.destroyAsteroid();
-        asteroidB.destroyAsteroid();
-      }
-    );
+    this.physics.add.collider(this.asteroids, this.asteroids);
 
     //When the player collides with an asteroid, destroy that asteroid and end the game.
     this.physics.add.collider(
@@ -314,6 +320,13 @@ class mainGame extends Phaser.Scene {
     restartButton.visible = false;
 
     this.gameOverOverlay = { gameOverText, restartButton };
+  }
+
+  spawnWaveOfAsteroids(level) {
+    this.asteroidController.genAsteroids(
+      this,
+      level * this.difficultyMultiplier
+    );
   }
 }
 
