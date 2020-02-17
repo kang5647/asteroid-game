@@ -2,6 +2,13 @@ import LargeAsteroid from "./LargeAsteroid.js";
 import MediumAsteroid from "./MediumAsteroid.js";
 import SmallAsteroid from "./SmallAsteroid.js";
 
+const sides = {
+  TOP: 0,
+  BOTTOM: 1,
+  LEFT: 2,
+  RIGHT: 3
+};
+
 //Asteroid Controller is responsible for generating and clearing waves of asteroids.
 class AsteroidController {
   //In order to prevent any null errors we need to init this.asteroids with values.
@@ -65,48 +72,34 @@ class AsteroidController {
 
   //Determines the x,y values for where the asteroid is supposed to spawn.
   genSpawnLocation(side, gameWidth, gameHeight) {
-    //left
-    if (side === 0) {
-      return { x: 0, y: this.randomIntFromInterval(0, gameHeight) };
-    }
-    //right
-    else if (side === 1) {
-      return { x: gameWidth, y: this.randomIntFromInterval(0, gameHeight) };
-    }
-    //bottom
-    else if (side === 2) {
-      return { x: this.randomIntFromInterval(0, gameWidth), y: 0 };
-    }
-    //top
-    else if (side === 3) {
-      return { x: this.randomIntFromInterval(0, gameWidth), y: gameHeight };
+    switch (side) {
+      case sides.LEFT:
+        return { x: 0, y: this.randomIntFromInterval(0, gameHeight) };
+      case sides.RIGHT:
+        return { x: gameWidth, y: this.randomIntFromInterval(0, gameHeight) };
+      case sides.BOTTOM:
+        return { x: this.randomIntFromInterval(0, gameWidth), y: 0 };
+      case sides.TOP:
+        return { x: this.randomIntFromInterval(0, gameWidth), y: gameHeight };
     }
   }
 
   genDirection(side) {
     //Left side is tricky because it requires a range (in degrees) of
     //Left: 270-360 or 0-90
-
-    //left
-    if (side === 0) {
-      if (this.randomIntFromInterval(0, 1) === 0) {
-        return this.randomIntFromInterval(280, 350);
-      } else {
-        return this.randomIntFromInterval(10, 80);
-      }
-      return;
-    }
-    //right
-    else if (side === 1) {
-      return this.randomIntFromInterval(110, 250);
-    }
-    //bottom
-    else if (side === 2) {
-      return this.randomIntFromInterval(200, 340);
-    }
-    //top
-    else if (side === 3) {
-      return this.randomIntFromInterval(20, 160);
+    switch (side) {
+      case sides.LEFT:
+        if (this.randomIntFromInterval(0, 1) === 0) {
+          return this.randomIntFromInterval(280, 350);
+        } else {
+          return this.randomIntFromInterval(10, 80);
+        }
+      case sides.RIGHT:
+        return this.randomIntFromInterval(110, 250);
+      case sides.BOTTOM:
+        return this.randomIntFromInterval(200, 340);
+      case sides.TOP:
+        return this.randomIntFromInterval(20, 160);
     }
   }
 
