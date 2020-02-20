@@ -4,9 +4,6 @@ import MediumAsteroid from "./MediumAsteroid.js";
 class LargeAsteroid extends Asteroid {
   constructor(scene, x, y, rotation, speed) {
     super(scene, x, y, "large_asteroid", rotation, speed);
-
-    this.setSize(42, 50);
-    this.setOffset(9, 5);
   }
 
   //Upon destruction, this method creates 3 medium asteroids, launches them in any direction, and then deletes itself.
