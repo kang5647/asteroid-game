@@ -226,7 +226,7 @@ class mainGame extends Phaser.Scene {
 
     //Alter Player Hitbox
     this.player.setSize(14, 14);
-    this.player.setOffset(7, 0);
+    this.player.setOffset(5, 0);
 
     //In order to play the explosion animation we need the player to exist.
     //This is used to disable player input when the player dies.

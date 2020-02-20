@@ -4,6 +4,8 @@ import smallAsteroid from "./SmallAsteroid.js";
 class MediumAsteroid extends Asteroid {
   constructor(scene, x, y, rotation, speed) {
     super(scene, x, y, "medium_asteroid_a", rotation, speed);
+    this.setSize(25, 22);
+    this.setOffset(3, 5);
   }
 
   //Upon destruction, this method creates 2 small asteroids, launches them in any direction, and then deletes itself.
