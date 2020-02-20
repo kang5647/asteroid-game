@@ -4,8 +4,6 @@ import { runInThisContext } from "vm";
 import Bolt from "./projectiles/Bolt.js";
 import LargeAsteroid from "./asteroids/LargeAsteroid.js";
 import AsteroidController from "./asteroids/AsteroidController.js";
-//import MediumAsteroid from "./asteroids/MediumAsteroid.js";
-//import SmallAsteroid from "./asteroids/SmallAsteroid.js";
 
 class mainGame extends Phaser.Scene {
   constructor() {
@@ -227,8 +225,8 @@ class mainGame extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
 
     //Alter Player Hitbox
-    this.player.setSize(12, 12);
-    this.player.setOffset(6, 0);
+    this.player.setSize(14, 14);
+    this.player.setOffset(7, 0);
 
     //In order to play the explosion animation we need the player to exist.
     //This is used to disable player input when the player dies.
