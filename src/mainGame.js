@@ -4,8 +4,6 @@ import { runInThisContext } from "vm";
 import Bolt from "./projectiles/Bolt.js";
 import LargeAsteroid from "./asteroids/LargeAsteroid.js";
 import AsteroidController from "./asteroids/AsteroidController.js";
-import MediumAsteroid from "./asteroids/MediumAsteroid.js";
-import SmallAsteroid from "./asteroids/SmallAsteroid.js";
 
 class mainGame extends Phaser.Scene {
   constructor() {
@@ -44,14 +42,6 @@ class mainGame extends Phaser.Scene {
     this.difficultyMultiplier = 5;
     this.level = 1;
     this.spawnWaveOfAsteroids(1);
-
-    new SmallAsteroid(
-      this,
-      this.worldWidth / 2,
-      this.worldHeight / 2 - 100,
-      0,
-      0
-    );
   }
 
   update() {
