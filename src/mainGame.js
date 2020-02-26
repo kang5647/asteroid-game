@@ -48,8 +48,11 @@ class mainGame extends Phaser.Scene {
     this.bulletTime = this.time.now;
 
     //Only allow game to reload when player has died.
+    this.playerHasDied = false;
     this.input.keyboard.on("keydown_ENTER", () => {
-      this.scene.restart();
+      if (this.playerHasDied) {
+        this.scene.restart();
+      }
     });
   }
 
@@ -296,6 +299,7 @@ class mainGame extends Phaser.Scene {
         if (!this.disablePlayer) {
           this.killPlayer(player, asteroid, this);
           this.playerHud.displayGameOverOverlay(this);
+          this.playerHasDied = true;
         }
       }
     );
