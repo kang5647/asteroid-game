@@ -46,6 +46,11 @@ class mainGame extends Phaser.Scene {
 
     //Used to space out time between shots for shooting controller method
     this.bulletTime = this.time.now;
+
+    //Only allow game to reload when player has died.
+    this.input.keyboard.on("keydown_ENTER", () => {
+      this.scene.restart();
+    });
   }
 
   update() {
