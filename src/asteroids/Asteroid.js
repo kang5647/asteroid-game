@@ -13,7 +13,7 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
     this.setRotation(rotation);
     scene.physics.world.enableBody(this);
     //Set so the projectiles collide with the set world boundries
-    this.setCollideWorldBounds(true);
+    //this.setCollideWorldBounds(true);
 
     this.setBounce(1, 1);
 
