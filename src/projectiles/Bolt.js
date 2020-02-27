@@ -20,11 +20,7 @@ class Bolt extends Phaser.Physics.Arcade.Sprite {
     this.setAngle(scene.player.angle);
     //Enable this object in the scene's physics, without this line adding velocity will have no effect.
     scene.physics.world.enableBody(this);
-    //Set so the projectiles collide with the set world boundries
-    this.setCollideWorldBounds(true);
-    //When the player collides with the world boundries allow for that to trigger an onWorld event.
-    //This is used so projectiles such as this are deleted upon contact with boundries.
-    this.body.onWorldBounds = true;
+
     //Sets the angular velocity from the players current angle of rotation, so that projectiles fly in the direction player is facing
     //for the third parameter pass this.body.velocity rather than this.body.acceleration. This makes it so projectiles
     //fly at a constant rate. Might make use of this for bombs or something.
@@ -33,6 +29,15 @@ class Bolt extends Phaser.Physics.Arcade.Sprite {
       850 + scene.player.body.speed,
       this.body.velocity
     );
+
+    //Destroys bolts after 500 milliseconds so that they don't clog the screen
+    this.timer = scene.time.addEvent({
+      delay: 800,
+      callback: () => {
+        this.destroy();
+      },
+      scope: this
+    });
 
     //Alter Bolt Hitbox
     this.setSize(12, 12);
