@@ -57,6 +57,9 @@ class mainGame extends Phaser.Scene {
   }
 
   update() {
+    this.physics.world.wrap(this.asteroids, 32);
+    this.physics.world.wrap(this.bolts, 32);
+    this.physics.world.wrap(this.player, 32);
     if (!this.disablePlayer) {
       this.speedController();
       this.directionController();
@@ -236,7 +239,6 @@ class mainGame extends Phaser.Scene {
     //Used for the toggle in the dampener function
     this.dampeners = true;
     this.player.setMaxVelocity(this.playerMaxVelocity);
-    this.player.setCollideWorldBounds(true);
 
     //Alter Player Hitbox
     this.player.setSize(14, 14);
