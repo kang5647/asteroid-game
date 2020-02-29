@@ -167,15 +167,10 @@ class mainGame extends Phaser.Scene {
   }
 
   createBackground() {
-    this.background = this.add.image(
-      window.innerWidth / 2,
-      window.innerHeight / 2,
-      "background"
-    );
+    this.background = this.add.image(400, 100, "background");
     this.background.setDisplaySize(window.innerWidth, window.innerHeight);
 
     this.background.setSize(window.innerWidth, window.innerHeight);
-    this.background.setScrollFactor(0);
 
     //Add in stars layer
     this.stars = this.add.tileSprite(
@@ -186,34 +181,21 @@ class mainGame extends Phaser.Scene {
       "stars"
     );
     this.stars.setScale(2);
-    this.stars.setScrollFactor(0);
 
     //Add in far off planets layer
-    this.planet_far = this.add.tileSprite(
-      0,
-      0,
-      this.sys.canvas.width,
-      this.sys.canvas.height,
-      "planet_far"
-    );
-    this.planet_far.setScale(6);
-    this.planet_far.setScrollFactor(0);
+    this.planet_far = this.add.image(475, 250, "planet_far");
+    this.planet_far.setScale(3);
+    this.planet_far.setFlipX(true);
 
     //Add in ring planet layer
-    this.planet_ring = this.add.tileSprite(0, 0, 2000, 2000, "planet_ring");
-    this.planet_ring.setScale(5);
-    this.planet_ring.setScrollFactor(0);
+    this.planet_ring = this.add.image(600, 400, "planet_ring");
+    this.planet_ring.setScale(3);
+    this.planet_ring.setAngle(90);
 
     //Add in big planets layer
-    this.planet_big = this.add.tileSprite(
-      -1000,
-      -200,
-      this.sys.canvas.width,
-      this.sys.canvas.height,
-      "planet_big"
-    );
-    this.planet_big.setScale(4);
-    this.planet_big.setScrollFactor(0);
+    this.planet_big = this.add.image(200, 500, "planet_big");
+    this.planet_big.setScale(2);
+    this.planet_big.setFlipX(true);
   }
 
   createPlayer() {
