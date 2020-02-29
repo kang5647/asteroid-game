@@ -4,6 +4,7 @@ import { runInThisContext } from "vm";
 import Bolt from "./projectiles/Bolt.js";
 import AsteroidController from "./asteroids/AsteroidController.js";
 import PlayerHud from "./PlayerHud.js";
+import Player from "./Player.js";
 
 class mainGame extends Phaser.Scene {
   constructor() {
@@ -21,11 +22,14 @@ class mainGame extends Phaser.Scene {
 
     this.createWorld(this.worldHeight, this.worldWidth);
     this.createBackground();
-    this.createPlayer();
+    this.cursorKeys = this.input.keyboard.createCursorKeys();
 
     //Create physics group, objects will be added automatically when a bolt object/asteroid is created
     this.bolts = this.physics.add.group();
     this.asteroids = this.physics.add.group();
+    this.players = this.physics.add.group();
+
+    this.player = new Player(this, 800, 0.999);
 
     //Colliders are used to trigger functions when two objects collide
     this.createColliders();
@@ -48,9 +52,8 @@ class mainGame extends Phaser.Scene {
     this.bulletTime = this.time.now;
 
     //Only allow game to reload when player has died.
-    this.playerHasDied = false;
     this.input.keyboard.on("keydown_ENTER", () => {
-      if (this.playerHasDied) {
+      if (!this.player.playerAlive) {
         this.scene.restart();
       }
     });
@@ -60,7 +63,7 @@ class mainGame extends Phaser.Scene {
     this.physics.world.wrap(this.asteroids, 32);
     this.physics.world.wrap(this.bolts, 32);
     this.physics.world.wrap(this.player, 32);
-    if (!this.disablePlayer) {
+    if (this.player.playerAlive) {
       this.speedController();
       this.directionController();
       this.inertiaDampenerController();
@@ -198,69 +201,6 @@ class mainGame extends Phaser.Scene {
     this.planet_big.setFlipX(true);
   }
 
-  createPlayer() {
-    //Player Settings
-    this.playerMaxVelocity = 600;
-    this.playerDrag = 0.99;
-    //Create player in the center of the world
-    this.player = this.physics.add.sprite(
-      this.worldWidth / 2,
-      this.worldHeight / 2,
-      "player_sprite"
-    );
-    //Double the size + Play the player idle anim
-    this.player.setScale(2);
-    this.player.play("playerIdle_anim");
-
-    //Player input/movement settings
-    this.cursorKeys = this.input.keyboard.createCursorKeys();
-    //this.cursorKeys.space.setEmitOnRepeat(true);
-    //Drag will use a damping effect rather than a linear approach. Much smoother brakes.
-    this.player.setDamping(true);
-    this.player.setDrag(this.playerDrag);
-    //Used for the toggle in the dampener function
-    this.dampeners = true;
-    this.player.setMaxVelocity(this.playerMaxVelocity);
-
-    //Alter Player Hitbox
-    this.player.setSize(14, 14);
-    this.player.setOffset(5, 0);
-
-    //In order to play the explosion animation we need the player to exist.
-    //This is used to disable player input when the player dies.
-    this.disablePlayer = false;
-    //Upon player death we want to play an animation and then kill the player.
-  }
-
-  //ASK RON!!! Im not able to access the scene here for some reason. WHY????
-  killPlayer(player, asteroid, scene) {
-    if (!this.disablePlayer) {
-      //Upon Collision, play the explosion animation
-      player.play("explosion_anim");
-      //Destroy asteroid for a better impact
-      asteroid.destroyAsteroid();
-      //If we delete the player right after playing the explosion anim the game will crash.
-      //This will cut the animation short && the player controller functions will crash the game because
-      //they are still lisening for player input on an object that no longer exists.
-
-      //To fix this we wait until the animation is complete BEFORE we destroy the player object.
-      player.on(
-        "animationcomplete",
-        () => {
-          player.destroy();
-        },
-        scene
-      );
-
-      //It is possible that before the explosion animation is finished the player will hit another asteroid.
-      //This causes this function to be invoked again causes the player to crash because in that time the player object
-      //has been deleted.
-
-      //To fix this we use the disable player member to prevent this function from being called again && disable the player input listener functions.
-      scene.disablePlayer = true;
-    }
-  }
-
   createColliders() {
     //Colliders are used to trigger functions when two objects collide
 
@@ -274,19 +214,6 @@ class mainGame extends Phaser.Scene {
 
     //This allows asteroids to collide with one another rather than move through one another.
     this.physics.add.collider(this.asteroids, this.asteroids);
-
-    //When the player collides with an asteroid, destroy that asteroid and end the game.
-    this.physics.add.collider(
-      this.player,
-      this.asteroids,
-      (player, asteroid) => {
-        if (!this.disablePlayer) {
-          this.killPlayer(player, asteroid, this);
-          this.playerHud.displayGameOverOverlay(this);
-          this.playerHasDied = true;
-        }
-      }
-    );
   }
 
   spawnWaveOfAsteroids(level) {
