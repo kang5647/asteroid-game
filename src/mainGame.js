@@ -29,7 +29,7 @@ class mainGame extends Phaser.Scene {
     this.asteroids = this.physics.add.group();
     this.players = this.physics.add.group();
 
-    this.player = new Player(this, 800, 0.999, 0.13, 75);
+    this.player = new Player(this, 800, 400, 0.999, 0.13, 75);
 
     //Colliders are used to trigger functions when two objects collide
     this.createColliders();

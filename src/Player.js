@@ -3,6 +3,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(
     scene,
     playerMaxVelocity,
+    playerAcceleration,
     playerDrag,
     rotationSpeed,
     bulletFrequency
@@ -12,6 +13,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.rotationSpeed = rotationSpeed;
     this.bulletFrequency = bulletFrequency;
     this.bulletTime = 0;
+    this.playerAcceleration = playerAcceleration;
     //Create player in the center of the world
     scene.add.existing(this);
     //In order for this constructor to run you need to add this object to a physics group.
@@ -81,14 +83,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       //Accelerate
       this.scene.physics.velocityFromRotation(
         this.rotation,
-        250,
+        this.playerAcceleration,
         this.body.acceleration
       );
     } else if (this.scene.cursorKeys.down.isDown) {
       //Decelerate
       this.scene.physics.velocityFromRotation(
         this.rotation,
-        -250,
+        -this.playerAcceleration / 2,
         this.body.acceleration
       );
     } else {
