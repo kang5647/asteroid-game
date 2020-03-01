@@ -19,10 +19,11 @@ class mainGame extends Phaser.Scene {
     this.difficultyMultiplier = 5;
     this.level = 1;
     this.scoreIncrease = 30;
+    this.score = 0;
+    this.cursorKeys = this.input.keyboard.createCursorKeys();
 
     this.createWorld(this.worldHeight, this.worldWidth);
     this.background = new Background(this);
-    this.cursorKeys = this.input.keyboard.createCursorKeys();
 
     //Create physics group, objects will be added automatically when a bolt object/asteroid is created
     this.bolts = this.physics.add.group();
@@ -38,18 +39,11 @@ class mainGame extends Phaser.Scene {
     this.myCam = this.cameras.main;
     //Scenes are infinite, so we set boundaries with the camera and the player
     this.myCam.setBounds(0, 0, this.worldWidth, this.worldHeight);
-    //Tell the camera to follow the player
     this.myCam.startFollow(this.player);
 
     //Create asteroidController
     this.asteroidController = new AsteroidController();
-    this.createPlayerHUD();
-
-    //Start Level 1
-    this.spawnWaveOfAsteroids(1);
-
-    //Used to space out time between shots for shooting controller method
-    this.bulletTime = this.time.now;
+    this.playerHud = new PlayerHud(this);
 
     //Only allow game to reload when player has died.
     this.input.keyboard.on("keydown_ENTER", () => {
@@ -57,18 +51,22 @@ class mainGame extends Phaser.Scene {
         this.scene.restart();
       }
     });
+
+    //Start Level 1
+    this.spawnWaveOfAsteroids(1);
   }
 
   update() {
-    this.physics.world.wrap(this.asteroids, 32);
-    this.physics.world.wrap(this.bolts, 32);
-    this.physics.world.wrap(this.player, 32);
     if (this.player.playerAlive) {
       this.player.speedController();
       this.player.directionController();
       this.player.shootingController();
+      //Enables all objects in game to wrap around the environment.
+      this.physics.world.wrap(this.asteroids, 32);
+      this.physics.world.wrap(this.bolts, 32);
+      this.physics.world.wrap(this.player, 32);
 
-      //Wait until wave is completed
+      //When the number of asteroids in the phyics group is empty, spawn the next wave.
       if (this.asteroids.getLength() === 0) {
         this.level += 1;
         this.playerHud.updateLevel(this.level);
@@ -76,8 +74,6 @@ class mainGame extends Phaser.Scene {
       }
     }
   }
-
-  //Main player movement functions
 
   createWorld(worldHeight, worldWidth) {
     this.bounds = this.physics.world.setBounds(
@@ -112,7 +108,7 @@ class mainGame extends Phaser.Scene {
       asteroid.destroyAsteroid();
     });
 
-    //This allows asteroids to collide with one another rather than move through one another.
+    //Allows asteroids to collide with one another rather than move through one another.
     this.physics.add.collider(this.asteroids, this.asteroids);
   }
 
@@ -121,11 +117,6 @@ class mainGame extends Phaser.Scene {
       this,
       level * this.difficultyMultiplier
     );
-  }
-  createPlayerHUD() {
-    this.score = 0;
-    this.lives = 3;
-    this.playerHud = new PlayerHud(this);
   }
 }
 
