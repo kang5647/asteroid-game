@@ -120,6 +120,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  resetPlayer() {
+    this.setPosition(this.scene.worldWidth / 2, this.scene.worldHeight / 2);
+    this.setVelocity(0);
+    //this.setAcceleration(0);
+  }
+
   /**
   //Fleshing out this feature added to backlog 
   shootingController() {
