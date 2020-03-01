@@ -5,6 +5,7 @@ import Bolt from "./projectiles/Bolt.js";
 import AsteroidController from "./asteroids/AsteroidController.js";
 import PlayerHud from "./PlayerHud.js";
 import Player from "./Player.js";
+import Background from "./Background.js";
 
 class mainGame extends Phaser.Scene {
   constructor() {
@@ -21,7 +22,7 @@ class mainGame extends Phaser.Scene {
     this.bulletFrequency = 75;
 
     this.createWorld(this.worldHeight, this.worldWidth);
-    this.createBackground();
+    this.background = new Background(this);
     this.cursorKeys = this.input.keyboard.createCursorKeys();
 
     //Create physics group, objects will be added automatically when a bolt object/asteroid is created
@@ -67,7 +68,6 @@ class mainGame extends Phaser.Scene {
       this.speedController();
       this.directionController();
       this.inertiaDampenerController();
-      this.parallaxController();
       this.shootingController();
 
       //Wait until wave is completed
@@ -135,18 +135,6 @@ class mainGame extends Phaser.Scene {
     }
   }
 
-  //Controls tilesprites scroll factor.
-  //Parallax functinos by moving objects (tilesprites) across the screen, based on camera movement, at different speeds.
-  //Objects supposed to be closer up move faster while objects supposed to be far away move slower. This creates a depth effect.
-  parallaxController() {
-    this.planet_far.tilePositionX = this.myCam.scrollX * 0.05;
-    this.planet_far.tilePositionY = this.myCam.scrollY * 0.05;
-    this.planet_ring.tilePositionX = this.myCam.scrollX * 0.1;
-    this.planet_ring.tilePositionY = this.myCam.scrollY * 0.1;
-    this.planet_big.tilePositionX = this.myCam.scrollX * 0.22;
-    this.planet_big.tilePositionY = this.myCam.scrollY * 0.22;
-  }
-
   createWorld(worldHeight, worldWidth) {
     this.bounds = this.physics.world.setBounds(
       0,
@@ -167,38 +155,6 @@ class mainGame extends Phaser.Scene {
       },
       this
     );
-  }
-
-  createBackground() {
-    this.background = this.add.image(400, 100, "background");
-    this.background.setDisplaySize(window.innerWidth, window.innerHeight);
-
-    this.background.setSize(window.innerWidth, window.innerHeight);
-
-    //Add in stars layer
-    this.stars = this.add.tileSprite(
-      0,
-      0,
-      this.sys.canvas.width,
-      this.sys.canvas.height,
-      "stars"
-    );
-    this.stars.setScale(2);
-
-    //Add in far off planets layer
-    this.planet_far = this.add.image(475, 250, "planet_far");
-    this.planet_far.setScale(3);
-    this.planet_far.setFlipX(true);
-
-    //Add in ring planet layer
-    this.planet_ring = this.add.image(600, 400, "planet_ring");
-    this.planet_ring.setScale(3);
-    this.planet_ring.setAngle(90);
-
-    //Add in big planets layer
-    this.planet_big = this.add.image(200, 500, "planet_big");
-    this.planet_big.setScale(2);
-    this.planet_big.setFlipX(true);
   }
 
   createColliders() {
