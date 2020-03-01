@@ -1,6 +1,17 @@
+import Bolt from "./projectiles/Bolt.js";
 class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, playerMaxVelocity, playerDrag) {
+  constructor(
+    scene,
+    playerMaxVelocity,
+    playerDrag,
+    rotationSpeed,
+    bulletFrequency
+  ) {
     super(scene, scene.worldWidth / 2, scene.worldHeight / 2, "player_sprite");
+    this.scene = scene;
+    this.rotationSpeed = rotationSpeed;
+    this.bulletFrequency = bulletFrequency;
+    this.bulletTime = 0;
     //Create player in the center of the world
     scene.add.existing(this);
     //In order for this constructor to run you need to add this object to a physics group.
@@ -39,7 +50,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     return this;
   }
 
-  //ASK RON!!! Im not able to access the scene here for some reason. WHY???
   killPlayer(player, asteroid, scene) {
     if (this.playerAlive) {
       //Upon Collision, play the explosion animation
@@ -65,6 +75,60 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.playerAlive = false;
     }
   }
+
+  speedController() {
+    if (this.scene.cursorKeys.up.isDown) {
+      //Accelerate
+      this.scene.physics.velocityFromRotation(
+        this.rotation,
+        250,
+        this.body.acceleration
+      );
+    } else if (this.scene.cursorKeys.down.isDown) {
+      //Decelerate
+      this.scene.physics.velocityFromRotation(
+        this.rotation,
+        -250,
+        this.body.acceleration
+      );
+    } else {
+      this.setAcceleration(0);
+    }
+  }
+
+  directionController() {
+    if (this.scene.cursorKeys.left.isDown) {
+      //Rotate left
+      this.setRotation(this.rotation - this.rotationSpeed);
+    } else if (this.scene.cursorKeys.right.isDown) {
+      //Rotate Right
+      this.setRotation(this.rotation + this.rotationSpeed);
+    }
+  }
+
+  shootingController() {
+    //Working solution to not allowing the player to just hold the down key.
+    //Later on I want to implement a recharging ammo system. But thats for a later day
+    if (
+      this.scene.cursorKeys.space.isDown &&
+      this.bulletTime <= this.scene.time.now
+    ) {
+      this.bulletTime = this.scene.time.now + this.bulletFrequency;
+      new Bolt(this.scene);
+    }
+  }
+
+  /**
+  //Fleshing out this feature added to backlog 
+  shootingController() {
+    //Working solution to not allowing the player to just hold the down key.
+    //Later on I want to implement a recharging ammo system. But thats for a later day
+    if (this.cursorKeys.space.isDown && this.bulletTime <= this.time.now) {
+      this.bulletTime = this.time.now + this.bulletFrequency;
+      new Bolt(this);
+    }
+  }
+   */
 }
 
 export default Player;

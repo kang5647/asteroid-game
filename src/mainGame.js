@@ -19,7 +19,6 @@ class mainGame extends Phaser.Scene {
     this.difficultyMultiplier = 5;
     this.level = 1;
     this.scoreIncrease = 30;
-    this.bulletFrequency = 75;
 
     this.createWorld(this.worldHeight, this.worldWidth);
     this.background = new Background(this);
@@ -30,7 +29,7 @@ class mainGame extends Phaser.Scene {
     this.asteroids = this.physics.add.group();
     this.players = this.physics.add.group();
 
-    this.player = new Player(this, 800, 0.999);
+    this.player = new Player(this, 800, 0.999, 0.13, 75);
 
     //Colliders are used to trigger functions when two objects collide
     this.createColliders();
@@ -65,10 +64,9 @@ class mainGame extends Phaser.Scene {
     this.physics.world.wrap(this.bolts, 32);
     this.physics.world.wrap(this.player, 32);
     if (this.player.playerAlive) {
-      this.speedController();
-      this.directionController();
-      this.inertiaDampenerController();
-      this.shootingController();
+      this.player.speedController();
+      this.player.directionController();
+      this.player.shootingController();
 
       //Wait until wave is completed
       if (this.asteroids.getLength() === 0) {
@@ -80,60 +78,6 @@ class mainGame extends Phaser.Scene {
   }
 
   //Main player movement functions
-
-  //Controls player input for acceleration and deceleration
-  speedController() {
-    if (this.cursorKeys.up.isDown) {
-      //Accelerate
-      this.physics.velocityFromRotation(
-        this.player.rotation,
-        250,
-        this.player.body.acceleration
-      );
-    } else if (this.cursorKeys.down.isDown) {
-      //Decelerate
-      this.physics.velocityFromRotation(
-        this.player.rotation,
-        -250,
-        this.player.body.acceleration
-      );
-    } else {
-      this.player.setAcceleration(0);
-    }
-  }
-  //Controlers player input for rotation
-  directionController() {
-    if (this.cursorKeys.left.isDown) {
-      //Rotate left
-      this.player.setRotation(this.player.rotation - 0.15);
-    } else if (this.cursorKeys.right.isDown) {
-      //Rotate Right
-      this.player.setRotation(this.player.rotation + 0.15);
-    }
-  }
-
-  //Shooting Controller
-  shootingController() {
-    //Working solution to not allowing the player to just hold the down key.
-    //Later on I want to implement a recharging ammo system. But thats for a later day
-    if (this.cursorKeys.space.isDown && this.bulletTime <= this.time.now) {
-      this.bulletTime = this.time.now + this.bulletFrequency;
-      new Bolt(this);
-    }
-  }
-
-  //Toggles player drag on and off
-  inertiaDampenerController() {
-    if (this.cursorKeys.shift.isDown) {
-      if (this.dampeners) {
-        this.dampeners = false;
-        this.player.setDrag(0);
-      } else {
-        this.dampeners = true;
-        this.player.setDrag(0.99);
-      }
-    }
-  }
 
   createWorld(worldHeight, worldWidth) {
     this.bounds = this.physics.world.setBounds(
