@@ -113,6 +113,7 @@ class mainGame extends Phaser.Scene {
   }
 
   spawnWaveOfAsteroids(level) {
+    this.player.resetPlayer();
     this.asteroidController.genAsteroids(
       this,
       level * this.difficultyMultiplier
