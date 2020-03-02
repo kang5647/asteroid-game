@@ -5,6 +5,7 @@ class SmallAsteroid extends Asteroid {
     super(scene, x, y, "small_asteroid", rotation, speed);
     this.setSize(12, 12);
     this.setOffset(5, 5);
+    scene.smallAsteroids.push(this);
   }
 
   //Upon destruction, the asteroid deletes itself.

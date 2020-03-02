@@ -28,6 +28,13 @@ class mainGame extends Phaser.Scene {
     //Create physics group, objects will be added automatically when a bolt object/asteroid is created
     this.bolts = this.physics.add.group();
     this.asteroids = this.physics.add.group();
+    //In order to prevent popin from larger asteroids and smaller asteroids being off screen for too long.
+    //Asteroids needed their own padding values. In order to do this we keep a record of all 3 asteroid types.
+    //Which are then called in the update function.
+    this.largeAsteroids = [];
+    this.mediumAsteroids = [];
+    this.smallAsteroids = [];
+
     this.players = this.physics.add.group();
 
     this.player = new Player(this, 800, 400, 0.999, 0.13, 75);
@@ -62,12 +69,18 @@ class mainGame extends Phaser.Scene {
       this.player.directionController();
       this.player.shootingController();
       //Enables all objects in game to wrap around the environment.
-      this.physics.world.wrap(this.asteroids, 32);
-      this.physics.world.wrap(this.bolts, 32);
-      this.physics.world.wrap(this.player, 32);
+      this.physics.world.wrapArray(this.largeAsteroids, 55);
+      this.physics.world.wrapArray(this.mediumAsteroids, 25);
+      this.physics.world.wrapArray(this.smallAsteroids, 15);
+      this.physics.world.wrap(this.bolts, 20);
+      this.physics.world.wrap(this.player, 20);
 
       //When the number of asteroids in the phyics group is empty, spawn the next wave.
       if (this.asteroids.getLength() === 0) {
+        this.largeAsteroids = [];
+        this.mediumAsteroids = [];
+        this.smallAsteroids = [];
+
         this.level += 1;
         this.playerHud.updateLevel(this.level);
         this.spawnWaveOfAsteroids(this.level);
@@ -86,21 +99,9 @@ class mainGame extends Phaser.Scene {
       true,
       true
     );
-    //Upon a collision with world boundries, delete whatever body comes in contact.
-    //This only works if the object's body is set to collide with boundries and onWorldsBounds is set to true.
-    this.physics.world.on(
-      "worldbounds",
-      function(body) {
-        body.gameObject.destroy();
-      },
-      this
-    );
   }
 
   createColliders() {
-    //Colliders are used to trigger functions when two objects collide
-
-    //When a bolt collides with an asteroid, destroy that asteroid
     this.physics.add.collider(this.bolts, this.asteroids, (bolt, asteroid) => {
       this.score += this.scoreIncrease;
       this.playerHud.updateScore(this.score);
