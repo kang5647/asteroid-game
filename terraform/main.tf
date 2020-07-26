@@ -31,4 +31,5 @@ module "application" {
   vpc_id           = module.network.vpc_id
   key_pair         = var.key_pair
   user_ip          = var.user_ip
+  private_key_path = var.private_key_path
 }
