@@ -6,7 +6,7 @@ variable "profile" {
 }
 
 variable "credentials_path" {
-  default = ""
+  default = "~/.aws/credentials"
 }
 
 variable "region" {
@@ -71,4 +71,9 @@ variable "instance_type" {
 variable "key_pair" {
   default     = "main-server"
   description = "ssh key-pair to use with instance"
+}
+
+variable "private_key_path" {
+  default     = ""
+  description = "path to ssh private key"
 }

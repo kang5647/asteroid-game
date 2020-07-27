@@ -1,0 +1,9 @@
+---
+- hosts: all
+  remote_user: ec2-user
+  tasks:
+    - name: Ensure docker deamon is running
+      service:
+        name: docker
+        state: started
+      become: true
