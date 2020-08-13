@@ -1,5 +1,7 @@
 # Asteroid-Game
 
+[![Build Status](https://cloud.drone.io/api/badges/Stolarskis/asteroid-game/status.svg)](https://cloud.drone.io/Stolarskis/asteroid-game)
+
 ## Build Steps
 
 1. `npm install`
@@ -13,9 +15,3 @@
   - [Space Ship Asssets](http://pixelgameart.org/web/portfolio/spaceship-shooter-environment/)
 
 Huge thanks to these guys!
-
-
-
-
-
-
