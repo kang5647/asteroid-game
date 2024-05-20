@@ -7,6 +7,13 @@
 1. `npm install`
 2. `npm start`
 
+3. Optional Step:
+```
+  nvm install --lts
+  nvm use --lts
+  export NODE_OPTIONS=--openssl-legacy-provider
+```
+
 ## Assets Sources
 
 - [Project template](https://github.com/photonstorm/phaser3-project-template)
